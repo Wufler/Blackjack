@@ -34,7 +34,7 @@ import {
 	TableHeader,
 	TableRow,
 } from '@/components/ui/table'
-import { format } from 'date-fns'
+import { format, formatDistanceToNowStrict } from 'date-fns'
 import { toast } from 'sonner'
 
 const getSuitIcon = (suit: string) => {
@@ -288,8 +288,8 @@ export default function BlackjackGame({
 	}
 
 	return (
-		<div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white flex items-center justify-center p-4">
-			<Card className="w-full max-w-4xl bg-gradient-to-br from-gray-800 to-gray-900 border-blue-500 shadow-2xl rounded-2xl overflow-hidden">
+		<div className="min-h-dvh bg-gradient-to-b from-gray-900 to-gray-800 text-white flex items-center justify-center sm:p-4">
+			<Card className="sm:min-h-full min-h-dvh w-full sm:border border-0 rounded-none sm:max-w-4xl bg-gradient-to-br from-gray-800 to-gray-900 border-blue-500 sm:rounded-2xl overflow-hidden">
 				<CardHeader className="bg-blue-500 p-6">
 					<CardTitle className="text-4xl sm:text-5xl text-center font-bold text-white">
 						Blackjack
@@ -351,7 +351,7 @@ export default function BlackjackGame({
 							</div>
 
 							{gameState === null && (
-								<div className="flex justify-center sm:flex-row flex-col gap-4 mb-8 px-6">
+								<div className="flex justify-center sm:flex-row flex-col gap-4 mb-8 sm:px-6">
 									<div className="w-full flex gap-4 items-center">
 										<Button
 											onClick={hit}
@@ -380,8 +380,8 @@ export default function BlackjackGame({
 					)}
 
 					{gameState !== null && (
-						<div className="flex justify-center sm:flex-row flex-col gap-4 mb-8 px-6">
-							<div className="w-full flex gap-4 items-center">
+						<div className="flex justify-center sm:flex-row flex-col gap-4 mb-8 sm:px-6">
+							<div className="w-full flex sm:flex-row flex-col gap-4 items-center">
 								<Button
 									onClick={playAgain}
 									className="w-full bg-blue-500 text-white border-none py-6 px-8 rounded-full text-lg transform transition-all hover:scale-105 hover:bg-blue-600"
@@ -430,7 +430,7 @@ export default function BlackjackGame({
 					)}
 
 					<div className="mt-8">
-						<Accordion type="single" collapsible className="text-white px-6">
+						<Accordion type="single" collapsible className="text-white sm:px-6">
 							<AccordionItem value="streaks" className="border-b-0">
 								<AccordionTrigger>
 									<div className="flex gap-3 items-center">
@@ -442,10 +442,10 @@ export default function BlackjackGame({
 									<Table>
 										<TableHeader>
 											<TableRow className="hover:bg-transparent text-base border-b border-blue-500">
+												<TableHead className="w-[50px] text-blue-300">#</TableHead>
+												<TableHead className="w-[125px] text-blue-300">Name</TableHead>
 												<TableHead className="w-[150px] text-blue-300">Date</TableHead>
-												<TableHead className="w-[150px] text-blue-300">Placement</TableHead>
-												<TableHead className="w-[150px] text-blue-300">Name</TableHead>
-												<TableHead className="text-right text-blue-300">Streak</TableHead>
+												<TableHead className="text-blue-300">Streak</TableHead>
 											</TableRow>
 										</TableHeader>
 										<TableBody>
@@ -458,9 +458,18 @@ export default function BlackjackGame({
 													}`}
 													key={index}
 												>
-													<TableCell>{format(topStreak.created_at, 'yyyy-MM-dd')}</TableCell>
-													<TableCell>#{index + 1}</TableCell>
+													<TableCell>{index + 1}</TableCell>
 													<TableCell>{topStreak.name}</TableCell>
+													<TableCell>
+														<time
+															title={format(topStreak.created_at, 'yyyy-MM-dd')}
+															dateTime={format(topStreak.created_at, 'yyyy-MM-dd')}
+														>
+															{formatDistanceToNowStrict(topStreak.created_at, {
+																addSuffix: true,
+															})}
+														</time>
+													</TableCell>
 													<TableCell>
 														{topStreak.count} {topStreak.count > 1 ? 'Wins' : 'Win'}
 													</TableCell>
