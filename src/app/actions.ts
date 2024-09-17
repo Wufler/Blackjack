@@ -1,9 +1,11 @@
 'use server'
 
 import { sql } from '@vercel/postgres'
+import { revalidatePath } from 'next/cache'
 
 export async function saveStreak(streak: number, name: string) {
     await sql`INSERT INTO streaks (count, name) VALUES (${streak}, ${name})`
+    revalidatePath("/")
 }
 
 export async function getTopStreaks() {

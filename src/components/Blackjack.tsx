@@ -16,7 +16,7 @@ import {
 } from '@/components/ui/popover'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { saveStreak, getTopStreaks } from '@/app/actions'
+import { saveStreak } from '@/app/actions'
 import { Club, Diamond, Heart, Spade, Trophy } from 'lucide-react'
 import { Separator } from '@/components/ui/separator'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -79,7 +79,13 @@ const PlayingCard = ({
 			animate={{ opacity: 1, y: 0 }}
 			exit={{ opacity: 0, y: -50 }}
 			transition={{ duration: 0.5, delay: index * 0.1 }}
-			className={`bg-black rounded-lg w-16 h-24 sm:w-20 sm:h-28 flex flex-col items-center p-2 border-2 sm:border-4 ${getBorderColor()} shadow-lg text-white transform transition-transform hover:scale-105`}
+			style={{
+				position: 'absolute',
+				top: `${index * 20}px`,
+				left: `${index * 27}px`,
+				zIndex: index,
+			}}
+			className={`bg-black rounded-lg w-16 h-24 sm:w-20 sm:h-28 flex flex-col items-center p-2 border-2 sm:border-4 ${getBorderColor()} shadow-lg text-white`}
 		>
 			<div className="text-lg sm:text-xl font-bold self-start">{card.value}</div>
 			<div className="text-3xl sm:text-4xl">{getSuitIcon(card.suit)}</div>
@@ -97,7 +103,6 @@ export default function BlackjackGame({
 	const [deck, setDeck] = useState<PlayingCard[]>([])
 	const [gameState, setGameState] = useState<GameResult>(null)
 	const [streak, setStreak] = useState(0)
-	const [topStreaks, setTopStreaks] = useState(streaks)
 	const [playerName, setPlayerName] = useState('')
 	const [isDealing, setIsDealing] = useState(false)
 	const [isGameStarted, setIsGameStarted] = useState(false)
@@ -279,8 +284,6 @@ export default function BlackjackGame({
 		if (streak > 0 && playerName.trim() !== '') {
 			setIsSubmitting(true)
 			await saveStreak(streak, playerName)
-			const newTopStreaks = await getTopStreaks()
-			setTopStreaks(newTopStreaks)
 			setStreak(0)
 			toast.success('Your score has been submitted!')
 			setIsSubmitting(false)
@@ -289,7 +292,7 @@ export default function BlackjackGame({
 
 	return (
 		<div className="min-h-dvh bg-gradient-to-b from-gray-900 to-gray-800 text-white flex items-center justify-center sm:p-4">
-			<Card className="sm:min-h-full min-h-dvh w-full sm:border border-0 rounded-none sm:max-w-4xl bg-gradient-to-br from-gray-800 to-gray-900 border-blue-500 sm:rounded-2xl overflow-hidden">
+			<Card className="sm:min-h-full min-h-dvh w-full sm:border border-0 rounded-none sm:max-w-2xl bg-gradient-to-br from-gray-800 to-gray-900 border-blue-500 sm:rounded-2xl overflow-hidden">
 				<CardHeader className="bg-blue-500 p-6">
 					<CardTitle className="text-4xl sm:text-5xl text-center font-bold text-white">
 						Blackjack
@@ -310,42 +313,52 @@ export default function BlackjackGame({
 						</div>
 					) : (
 						<div className="relative">
-							<div className="grid gap-8 mb-10 p-6 text-white">
-								<div className="flex flex-col items-center gap-6">
-									<h3 className="text-2xl font-semibold mb-2 text-blue-300">
-										Dealer&apos;s Hand: {calculateHandValue(dealerHand)}
+							<div className="grid gap-4 p-4 pt-0 mb-4 text-white">
+								<div className="relative flex flex-col items-center gap-1">
+									<h3 className="text-2xl font-semibold mb-2 text-muted-foreground">
+										Dealer
 									</h3>
-									<div className="flex flex-wrap justify-center gap-4">
-										<AnimatePresence>
-											{dealerHand.map((card, index) => (
-												<PlayingCard
-													key={index}
-													card={card}
-													result={gameState}
-													isPlayer={false}
-													index={index}
-												/>
-											))}
-										</AnimatePresence>
+									<div className="relative flex justify-center items-center w-full h-[200px]">
+										<div className="relative w-[175px] h-full">
+											<AnimatePresence>
+												{dealerHand.map((card, index) => (
+													<PlayingCard
+														key={index}
+														card={card}
+														result={gameState}
+														isPlayer={false}
+														index={index}
+													/>
+												))}
+											</AnimatePresence>
+										</div>
+									</div>
+									<div className="absolute bottom-0 text-2xl font-bold">
+										{calculateHandValue(dealerHand)}
 									</div>
 								</div>
 								<Separator className="bg-blue-500 opacity-50" />
-								<div className="flex flex-col items-center gap-6">
-									<h3 className="text-2xl font-semibold mb-2 text-blue-300">
-										Your Hand: {calculateHandValue(playerHand)}
+								<div className="relative flex flex-col items-center gap-1">
+									<h3 className="text-2xl font-semibold mb-2 text-muted-foreground">
+										You
 									</h3>
-									<div className="flex flex-wrap justify-center gap-4">
-										<AnimatePresence>
-											{playerHand.map((card, index) => (
-												<PlayingCard
-													key={index}
-													card={card}
-													result={gameState}
-													isPlayer={true}
-													index={index}
-												/>
-											))}
-										</AnimatePresence>
+									<div className="relative flex justify-center items-center w-full h-[200px]">
+										<div className="relative w-[175px] h-full">
+											<AnimatePresence>
+												{playerHand.map((card, index) => (
+													<PlayingCard
+														key={index}
+														card={card}
+														result={gameState}
+														isPlayer={true}
+														index={index}
+													/>
+												))}
+											</AnimatePresence>
+										</div>
+									</div>
+									<div className="absolute bottom-0 text-2xl font-bold">
+										{calculateHandValue(playerHand)}
 									</div>
 								</div>
 							</div>
@@ -384,14 +397,14 @@ export default function BlackjackGame({
 							<div className="w-full flex sm:flex-row flex-col gap-4 items-center">
 								<Button
 									onClick={playAgain}
-									className="w-full bg-blue-500 text-white border-none py-6 px-8 rounded-full text-lg transform transition-all hover:scale-105 hover:bg-blue-600"
+									className="w-full bg-blue-500 text-white border-none py-6 px-8 rounded-full text-lg hover:bg-blue-600"
 								>
 									Play Again
 								</Button>
 								{streak > 0 && (
 									<Popover>
 										<PopoverTrigger asChild>
-											<Button className="w-full bg-purple-500 text-white border-none py-6 px-8 rounded-full text-lg transform transition-all hover:scale-105 hover:bg-purple-600">
+											<Button className="w-full bg-purple-500 text-white border-none py-6 px-8 rounded-full text-lg hover:bg-purple-600">
 												Submit Streak
 											</Button>
 										</PopoverTrigger>
@@ -442,14 +455,14 @@ export default function BlackjackGame({
 									<Table>
 										<TableHeader>
 											<TableRow className="hover:bg-transparent text-base border-b border-blue-500">
-												<TableHead className="w-[50px] text-blue-300">#</TableHead>
-												<TableHead className="w-[125px] text-blue-300">Name</TableHead>
-												<TableHead className="w-[150px] text-blue-300">Date</TableHead>
+												<TableHead className="min-w-[50px] text-blue-300">#</TableHead>
+												<TableHead className="min-w-[125px] text-blue-300">Name</TableHead>
+												<TableHead className="min-w-[150px] text-blue-300">Date</TableHead>
 												<TableHead className="text-blue-300">Streak</TableHead>
 											</TableRow>
 										</TableHeader>
 										<TableBody>
-											{topStreaks.map((topStreak, index) => (
+											{streaks.map((streak, index) => (
 												<TableRow
 													className={`hover:bg-transparent text-base ${
 														index === 0 ? 'text-yellow-400' : ''
@@ -459,19 +472,19 @@ export default function BlackjackGame({
 													key={index}
 												>
 													<TableCell>{index + 1}</TableCell>
-													<TableCell>{topStreak.name}</TableCell>
+													<TableCell>{streak.name}</TableCell>
 													<TableCell>
 														<time
-															title={format(topStreak.created_at, 'yyyy-MM-dd')}
-															dateTime={format(topStreak.created_at, 'yyyy-MM-dd')}
+															title={format(streak.created_at, 'yyyy-MM-dd')}
+															dateTime={format(streak.created_at, 'yyyy-MM-dd')}
 														>
-															{formatDistanceToNowStrict(topStreak.created_at, {
+															{formatDistanceToNowStrict(streak.created_at, {
 																addSuffix: true,
 															})}
 														</time>
 													</TableCell>
 													<TableCell>
-														{topStreak.count} {topStreak.count > 1 ? 'Wins' : 'Win'}
+														{streak.count} {streak.count > 1 ? 'Wins' : 'Win'}
 													</TableCell>
 												</TableRow>
 											))}
