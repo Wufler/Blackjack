@@ -17,7 +17,7 @@ export function ControlPanel({
 			initial={{ opacity: 0, y: 20 }}
 			animate={{ opacity: 1, y: 0 }}
 			transition={{ duration: 0.5 }}
-			className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-8 md:mb-0 mb-12"
+			className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-6"
 		>
 			<div className="flex gap-4 w-full">
 				{gameState === null ? (
