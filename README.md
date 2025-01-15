@@ -8,6 +8,9 @@ Try to build up a streak and submit your score to the leaderboard!
 
 ```bash
 git clone https://github.com/WoIfey/Blackjack.git
+```
+
+```bash
 cd Blackjack
 ```
 
