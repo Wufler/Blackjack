@@ -21,7 +21,7 @@ type GameBoardProps = {
 type Streak = {
     name: string
     count: number
-    created_at: Date
+    createdAt: Date
 }
 
 type ControlPanelProps = {

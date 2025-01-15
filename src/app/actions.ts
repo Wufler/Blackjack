@@ -17,7 +17,7 @@ export async function getTopStreaks() {
         select: {
             name: true,
             count: true,
-            created_at: true
+            createdAt: true
         },
         orderBy: {
             count: 'desc'

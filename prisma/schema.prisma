@@ -8,8 +8,9 @@ datasource db {
 }
 
 model Streaks {
-  id         Int      @id @default(autoincrement())
-  count      Int
-  name       String
-  created_at DateTime @default(now())
+  id        Int      @id @default(autoincrement())
+  count     Int
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 }

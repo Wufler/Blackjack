@@ -57,7 +57,7 @@ export function LeaderBoard({ streaks }: { streaks: Streak[] }) {
 											{streak.name}
 										</p>
 										<p className="text-sm opacity-75">
-											{formatDistanceToNowStrict(streak.created_at, { addSuffix: true })}
+											{formatDistanceToNowStrict(streak.createdAt, { addSuffix: true })}
 										</p>
 									</div>
 								</div>
