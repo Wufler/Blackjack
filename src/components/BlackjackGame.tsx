@@ -36,25 +36,28 @@ export default function BlackjackGame({ streaks }: { streaks: Streak[] }) {
 	}, [isGameStarted, startGame])
 
 	return (
-		<>
-			<div className="min-h-dvh bg-gradient-to-b from-gray-900 to-gray-800 text-white flex md:items-center justify-center md:p-8 md:shadow-xl">
+		<div className="min-h-dvh bg-gradient-to-b from-gray-900 to-gray-800 text-white flex flex-col">
+			<div className="flex-1 flex md:items-center justify-center md:p-8">
 				<Card className="w-full max-w-4xl bg-gradient-to-br from-gray-800 to-gray-900 rounded-none md:border-blue-500 md:rounded-lg overflow-hidden shadow-2xl">
-					<CardContent className="p-8">
+					<CardContent className="p-4 md:p-8">
 						<div className="md:flex md:flex-row md:gap-6">
 							<div className="md:hidden w-full">
-								<Tabs defaultValue="game" className="w-full">
-									<TabsList className="grid w-full grid-cols-2 bg-transparent">
-										<TabsTrigger value="game" className="data-[state=active]:bg-blue-500">
+								<Tabs defaultValue="game">
+									<TabsList className="flex justify-center items-center h-auto gap-2 rounded-none bg-transparent px-0 py-1 pb-4 text-foreground">
+										<TabsTrigger
+											value="game"
+											className="relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 hover:bg-none hover:text-foreground data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:after:bg-blue-500 data-[state=active]:hover:bg-none"
+										>
 											Game
 										</TabsTrigger>
 										<TabsTrigger
-											value="leaderboard"
-											className="data-[state=active]:bg-blue-500"
+											value="streaks"
+											className="relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 hover:bg-none hover:text-foreground data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:after:bg-blue-500 data-[state=active]:hover:bg-none"
 										>
-											Leaderboard
+											Streaks
 										</TabsTrigger>
 									</TabsList>
-									<TabsContent value="game" className="mt-4">
+									<TabsContent value="game">
 										<AnimatePresence mode="wait">
 											{!isGameStarted ? (
 												<motion.div
@@ -106,7 +109,7 @@ export default function BlackjackGame({ streaks }: { streaks: Streak[] }) {
 											)}
 										</AnimatePresence>
 									</TabsContent>
-									<TabsContent value="leaderboard" className="mt-4">
+									<TabsContent value="streaks">
 										<LeaderBoard streaks={streaks} />
 									</TabsContent>
 								</Tabs>
@@ -172,6 +175,6 @@ export default function BlackjackGame({ streaks }: { streaks: Streak[] }) {
 				</Card>
 			</div>
 			<Footer />
-		</>
+		</div>
 	)
 }

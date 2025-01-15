@@ -4,13 +4,13 @@ import { Club, Diamond, Heart, Spade } from 'lucide-react'
 const getSuitIcon = (suit: string) => {
 	switch (suit) {
 		case 'Spade':
-			return <Spade className="text-gray-800 size-7" strokeWidth={3} />
+			return <Spade className="text-gray-200 size-7" strokeWidth={3} />
 		case 'Heart':
 			return <Heart className="text-red-500 size-7" strokeWidth={3} />
 		case 'Diamond':
 			return <Diamond className="text-red-500 size-7" strokeWidth={3} />
 		case 'Club':
-			return <Club className="text-gray-800 size-7" strokeWidth={3} />
+			return <Club className="text-gray-200 size-7" strokeWidth={3} />
 		default:
 			return null
 	}
@@ -44,13 +44,13 @@ export function PlayingCard({
 				left: `${index * 30}px`,
 				zIndex: index,
 			}}
-			className={`bg-white rounded-lg w-16 h-24 sm:w-20 sm:h-28 flex flex-col items-center justify-between p-2 border-4 ${getBorderColor()} shadow-lg relative`}
+			className={`bg-gradient-to-t to-gray-900 from-gray-700 rounded-lg w-16 h-24 sm:w-20 sm:h-28 flex flex-col items-center justify-between p-2 border-4 ${getBorderColor()} shadow-lg relative`}
 		>
 			<div
 				className={`text-lg sm:text-2xl font-bold absolute top-1 left-2 ${
 					card.suit === 'Heart' || card.suit === 'Diamond'
 						? 'text-red-500'
-						: 'text-gray-800'
+						: 'text-gray-200'
 				}`}
 			>
 				{card.value}

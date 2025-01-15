@@ -11,6 +11,7 @@
 		"docker": "docker-compose up -d"
 	},
 	"dependencies": {
+		"@number-flow/react": "^0.5.5",
 		"@radix-ui/react-label": "^2.1.1",
 		"@radix-ui/react-popover": "^1.1.4",
 		"@radix-ui/react-scroll-area": "^1.2.2",

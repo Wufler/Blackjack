@@ -22,7 +22,7 @@ export const metadata: Metadata = {
 		url: 'https://blackyjack.vercel.app',
 		images: [
 			{
-				url: 'https://wolfey.s-ul.eu/qaWlY700',
+				url: 'https://wolfey.s-ul.eu/ZmzQL86w',
 				width: 1280,
 				height: 720,
 				alt: 'Thumbnail',

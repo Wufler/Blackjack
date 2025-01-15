@@ -1,7 +1,7 @@
 import { useState, useTransition } from 'react'
+import { Trophy } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
 import {
 	Popover,
 	PopoverContent,
@@ -9,7 +9,6 @@ import {
 } from '@/components/ui/popover'
 import { saveStreak } from '@/app/actions'
 import { toast } from 'sonner'
-import { motion } from 'motion/react'
 
 export function SubmitStreak({
 	streak,
@@ -26,7 +25,7 @@ export function SubmitStreak({
 		startTransition(async () => {
 			if (streak > 0 && playerName) {
 				await saveStreak(streak, playerName)
-				toast.success('Your score has been submitted!')
+				toast.success(`Your streak of ${streak} has been submitted!`)
 				onSubmit()
 			}
 		})
@@ -35,25 +34,21 @@ export function SubmitStreak({
 	return (
 		<Popover>
 			<PopoverTrigger asChild>
-				<motion.div>
-					<Button className="w-full bg-purple-500 text-white border-none py-6 px-8 rounded-lg text-lg hover:bg-purple-600">
-						Submit Streak
-					</Button>
-				</motion.div>
+				<Button className="w-full bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 text-white border-none py-6 px-8 rounded-lg text-lg transition-all duration-200">
+					<Trophy className="size-6" />
+					Submit Streak
+				</Button>
 			</PopoverTrigger>
 			<PopoverContent
 				side="top"
-				className="bg-gradient-to-b from-gray-800 to-gray-900 border-gray-700 p-4 rounded-xl shadow-xl"
+				className="max-w-56 bg-gradient-to-b from-gray-800 to-gray-900 border-gray-700 p-4 rounded-xl shadow-xl"
 			>
 				<form onSubmit={handleSubmit} className="space-y-4">
 					<div>
-						<Label htmlFor="name" className="text-blue-300">
-							Name
-						</Label>
 						<Input
 							id="name"
 							type="text"
-							placeholder="Joe"
+							placeholder="Insert your name..."
 							value={playerName}
 							maxLength={25}
 							required
@@ -64,9 +59,11 @@ export function SubmitStreak({
 					<Button
 						type="submit"
 						disabled={isPending}
-						className="w-full bg-blue-500 text-white hover:bg-blue-600"
+						className="w-full bg-gradient-to-r from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700 text-white transition-all duration-200"
 					>
-						Submit {streak} {streak > 1 ? 'wins' : 'win'}
+						{isPending
+							? 'Publishing...'
+							: `Publish ${streak} Win${streak > 1 ? 's' : ''}`}
 					</Button>
 				</form>
 			</PopoverContent>

@@ -1,6 +1,7 @@
 import { PlayingCard } from './PlayingCard'
-import { AnimatePresence, motion } from 'motion/react'
+import { AnimatePresence } from 'motion/react'
 import { Trophy } from 'lucide-react'
+import NumberFlow from '@number-flow/react'
 
 export function GameBoard({
 	playerHand,
@@ -42,16 +43,21 @@ function HandDisplay({
 	return (
 		<div className="relative">
 			<div className="flex items-center justify-between mb-4">
-				<h3
-					className={`text-2xl font-semibold ${
+				<div
+					className={`text-lg font-semibold flex justify-center items-end gap-2 ${
 						title === 'You' ? 'text-white' : 'text-blue-400'
 					}`}
 				>
-					{title}
-				</h3>
+					<NumberFlow
+						value={calculateHandValue(hand)}
+						className="text-2xl font-bold"
+					/>
+					<span className="opacity-50">{title}</span>
+				</div>
 				{isPlayer && streak !== undefined && (
 					<div className="px-4 py-2 rounded-lg text-lg font-semibold flex items-center gap-2">
-						<Trophy className="text-yellow-400 size-5" /> {streak}
+						<Trophy className="text-yellow-400 size-5" />
+						<NumberFlow value={streak} />
 					</div>
 				)}
 			</div>
@@ -68,13 +74,6 @@ function HandDisplay({
 					))}
 				</AnimatePresence>
 			</div>
-			<motion.div
-				initial={{ opacity: 0, y: 10 }}
-				animate={{ opacity: 1, y: 0 }}
-				className="absolute bottom-0 left-auto right-0 md:right-auto md:left-0 text-2xl font-bold bg-gray-700 text-white px-3 py-1 rounded-lg"
-			>
-				{calculateHandValue(hand)}
-			</motion.div>
 		</div>
 	)
 }
