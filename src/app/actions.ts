@@ -1,14 +1,27 @@
 'use server'
-
-import { sql } from '@vercel/postgres'
 import { revalidatePath } from 'next/cache'
+import { prisma } from '../lib/prisma'
 
 export async function saveStreak(streak: number, name: string) {
-    await sql`INSERT INTO streaks (count, name) VALUES (${streak}, ${name})`
+    await prisma.streaks.create({
+        data: {
+            count: streak,
+            name: name
+        }
+    })
     revalidatePath("/")
 }
 
 export async function getTopStreaks() {
-    const { rows } = await sql`SELECT name, count, created_at FROM streaks ORDER BY count DESC LIMIT 5`
-    return rows.map(row => ({ name: row.name, count: row.count, created_at: row.created_at }))
+    return await prisma.streaks.findMany({
+        select: {
+            name: true,
+            count: true,
+            created_at: true
+        },
+        orderBy: {
+            count: 'desc'
+        },
+        take: 10
+    })
 }

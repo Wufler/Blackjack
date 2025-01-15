@@ -1,9 +1,8 @@
-import Game from '@/components/Blackjack'
+import Game from '@/components/BlackjackGame'
 import { getTopStreaks } from './actions'
-import { unstable_noStore as noStore } from 'next/cache'
+import Footer from '@/components/Footer'
 
 export default async function Page() {
-	noStore()
 	const streaks = await getTopStreaks()
 	return <Game streaks={streaks} />
 }

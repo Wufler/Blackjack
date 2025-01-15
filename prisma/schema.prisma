@@ -1,0 +1,15 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Streaks {
+  id         Int      @id @default(autoincrement())
+  count      Int
+  name       String
+  created_at DateTime @default(now())
+}
