@@ -4,7 +4,7 @@
 	"private": true,
 	"scripts": {
 		"dev": "next dev --turbopack",
-		"build": "npx prisma generate && next build && npx prisma migrate dev ",
+		"build": "npx prisma generate && next build && npx prisma migrate deploy",
 		"start": "next start",
 		"lint": "next lint",
 		"prisma": "npx prisma generate && npx prisma migrate dev",
