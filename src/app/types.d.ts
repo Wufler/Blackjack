@@ -16,6 +16,7 @@ type GameBoardProps = {
     gameState: GameResult
     calculateHandValue: (hand: PlayingCard[]) => number
     streak: number
+    previousStreak: number
 }
 
 type Streak = {
@@ -41,6 +42,7 @@ type HandDisplayProps = {
     isPlayer: boolean
     streak: number
     calculateHandValue: (hand: PlayingCard[]) => number
+    previousStreak: number
 }
 
 type GameResult = 'win' | 'lose' | 'tie' | null

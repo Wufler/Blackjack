@@ -9,6 +9,7 @@ export function GameBoard({
 	gameState,
 	calculateHandValue,
 	streak,
+	previousStreak,
 }: GameBoardProps) {
 	return (
 		<div className="grid gap-8">
@@ -19,6 +20,7 @@ export function GameBoard({
 				isPlayer={false}
 				calculateHandValue={calculateHandValue}
 				streak={streak}
+				previousStreak={previousStreak}
 			/>
 			<HandDisplay
 				title="You"
@@ -27,6 +29,7 @@ export function GameBoard({
 				isPlayer={true}
 				calculateHandValue={calculateHandValue}
 				streak={streak}
+				previousStreak={previousStreak}
 			/>
 		</div>
 	)
@@ -39,6 +42,7 @@ function HandDisplay({
 	isPlayer,
 	calculateHandValue,
 	streak,
+	previousStreak,
 }: HandDisplayProps) {
 	return (
 		<div className="relative">
@@ -57,7 +61,12 @@ function HandDisplay({
 				{isPlayer && streak !== undefined && (
 					<div className="px-4 py-2 rounded-lg text-lg font-semibold flex items-center gap-2">
 						<Trophy className="text-yellow-400 size-5" />
-						<NumberFlow value={streak} />
+						<div className="flex items-center gap-1">
+							<NumberFlow value={streak} />
+							{gameState === 'lose' && previousStreak > 0 && (
+								<span className="opacity-50">({previousStreak})</span>
+							)}
+						</div>
 					</div>
 				)}
 			</div>

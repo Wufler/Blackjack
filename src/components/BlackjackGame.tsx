@@ -5,7 +5,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { GameBoard } from './GameBoard'
 import { ControlPanel } from './ControlPanel'
-import { LeaderBoard } from './LeaderBoard'
+import LeaderBoard from './LeaderBoard'
 import { useGameLogic } from '@/hooks/useGameLogic'
 import { useSoundEffects } from '@/hooks/useSoundEffects'
 import { motion, AnimatePresence } from 'motion/react'
@@ -20,6 +20,7 @@ export default function BlackjackGame({ streaks }: { streaks: Streak[] }) {
 		dealerHand,
 		gameState,
 		streak,
+		previousStreak, // Add this
 		isDealing,
 		hit,
 		stand,
@@ -87,14 +88,15 @@ export default function BlackjackGame({ streaks }: { streaks: Streak[] }) {
 													initial={{ opacity: 0, y: 20 }}
 													animate={{ opacity: 1, y: 0 }}
 													exit={{ opacity: 0, y: -20 }}
-													transition={{ duration: 0.5 }}
+													transition={{ duration: 0.3 }}
 												>
 													<GameBoard
 														playerHand={playerHand}
 														dealerHand={dealerHand}
 														gameState={gameState}
-														streak={streak}
 														calculateHandValue={calculateHandValue}
+														streak={streak}
+														previousStreak={previousStreak}
 													/>
 													<ControlPanel
 														gameState={gameState}
@@ -154,6 +156,7 @@ export default function BlackjackGame({ streaks }: { streaks: Streak[] }) {
 													gameState={gameState}
 													calculateHandValue={calculateHandValue}
 													streak={streak}
+													previousStreak={previousStreak}
 												/>
 												<ControlPanel
 													gameState={gameState}

@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useRef, useEffect } from 'react'
 
 export function useGameLogic(playCardSound: () => void, playMixingSound: () => void) {
     const [playerHand, setPlayerHand] = useState<PlayingCard[]>([])
@@ -7,6 +7,27 @@ export function useGameLogic(playCardSound: () => void, playMixingSound: () => v
     const [gameState, setGameState] = useState<GameResult>(null)
     const [streak, setStreak] = useState(0)
     const [isDealing, setIsDealing] = useState(false)
+    const [previousStreak, setPreviousStreak] = useState(0);
+
+    const endGameRef = useRef<(result: GameResult) => void>(null)
+
+    const handleGameLoss = useCallback(() => {
+        setPreviousStreak(streak);
+        setStreak(0);
+    }, [streak]);
+
+    const endGame = useCallback((result: GameResult) => {
+        setGameState(result)
+        if (result === 'win') {
+            setStreak(prevStreak => prevStreak + 1)
+        } else if (result === 'lose') {
+            handleGameLoss()
+        }
+    }, [handleGameLoss])
+
+    useEffect(() => {
+        endGameRef.current = endGame
+    }, [endGame])
 
     const initializeDeck = useCallback(() => {
         const suits = ['Spade', 'Heart', 'Diamond', 'Club']
@@ -55,9 +76,9 @@ export function useGameLogic(playCardSound: () => void, playMixingSound: () => v
         const dealerValue = calculateHandValue(newDealerHand)
 
         if (playerValue === 21) {
-            endGame('win')
+            endGameRef.current?.('win')
         } else if (dealerValue === 21) {
-            endGame('lose')
+            endGameRef.current?.('lose')
         } else {
             setGameState(null)
         }
@@ -74,9 +95,9 @@ export function useGameLogic(playCardSound: () => void, playMixingSound: () => v
             setIsDealing(false)
             const newHandValue = calculateHandValue(newHand)
             if (newHandValue > 21) {
-                endGame('lose')
+                endGameRef.current?.('lose')
             } else if (newHandValue === 21) {
-                endGame('win')
+                endGameRef.current?.('win')
             }
         }
     }
@@ -99,11 +120,11 @@ export function useGameLogic(playCardSound: () => void, playMixingSound: () => v
         const playerValue = calculateHandValue(playerHand)
         const dealerValue = calculateHandValue(currentDealerHand)
         if (dealerValue > 21 || playerValue > dealerValue) {
-            endGame('win')
+            endGameRef.current?.('win')
         } else if (playerValue < dealerValue) {
-            endGame('lose')
+            endGameRef.current?.('lose')
         } else {
-            endGame('tie')
+            endGameRef.current?.('tie')
         }
     }
 
@@ -125,15 +146,6 @@ export function useGameLogic(playCardSound: () => void, playMixingSound: () => v
             aces -= 1
         }
         return value
-    }
-
-    const endGame = (result: GameResult) => {
-        setGameState(result)
-        if (result === 'win') {
-            setStreak(prevStreak => prevStreak + 1)
-        } else if (result === 'lose') {
-            setStreak(0)
-        }
     }
 
     const playAgain = () => {
@@ -160,6 +172,7 @@ export function useGameLogic(playCardSound: () => void, playMixingSound: () => v
         playAgain,
         calculateHandValue,
         resetStreak,
+        previousStreak,
     }
 }
 

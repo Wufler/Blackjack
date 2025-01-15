@@ -1,9 +1,10 @@
+import { memo } from 'react'
 import { motion } from 'motion/react'
 import { Trophy, Flame } from 'lucide-react'
 import { formatDistanceToNowStrict } from 'date-fns'
 import { ScrollArea } from '@/components/ui/scroll-area'
 
-export function LeaderBoard({ streaks }: { streaks: Streak[] }) {
+export default memo(function LeaderBoard({ streaks }: { streaks: Streak[] }) {
 	if (!streaks.length) {
 		return (
 			<div className="bg-gray-800 rounded-lg p-4 shadow-lg w-full md:w-80 md:h-[624px]">
@@ -29,7 +30,7 @@ export function LeaderBoard({ streaks }: { streaks: Streak[] }) {
 								key={index}
 								initial={{ opacity: 0, y: 20 }}
 								animate={{ opacity: 1, y: 0 }}
-								transition={{ delay: index * 0.1 }}
+								transition={{ delay: index * 0.04 }}
 								className={`bg-gray-700 rounded-lg p-3 flex items-center relative overflow-hidden ${
 									index === 0 ? 'bg-gradient-to-r to-yellow-500 from-yellow-600' : ''
 								} ${
@@ -68,4 +69,4 @@ export function LeaderBoard({ streaks }: { streaks: Streak[] }) {
 			</motion.div>
 		</div>
 	)
-}
+})

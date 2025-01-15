@@ -1,6 +1,7 @@
 import Github from './ui/github'
+import { memo } from 'react'
 
-export default function Footer() {
+export default memo(function Footer() {
 	return (
 		<footer className="w-full text-gray-300 py-4 px-6">
 			<div className="flex items-center md:justify-evenly justify-between md:py-2">
@@ -15,4 +16,4 @@ export default function Footer() {
 			</div>
 		</footer>
 	)
-}
+})
