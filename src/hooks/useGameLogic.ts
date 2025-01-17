@@ -32,7 +32,7 @@ export function useGameLogic(playCardSound: () => void, playMixingSound: () => v
     const initializeDeck = useCallback(() => {
         const suits = ['Spade', 'Heart', 'Diamond', 'Club']
         const values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
-        const newDeck = suits.flatMap(suit => values.map(value => ({ suit, value })))
+        const newDeck = suits.flatMap(suit => values.map(value => ({ suit, value, hidden: false })))
         return shuffleDeck(newDeck)
     }, [])
 
@@ -41,10 +41,10 @@ export function useGameLogic(playCardSound: () => void, playMixingSound: () => v
     }
 
     const drawCard = useCallback(
-        (currentDeck: PlayingCard[]): [PlayingCard, PlayingCard[]] => {
+        (currentDeck: PlayingCard[], hidden: boolean = false): [PlayingCard, PlayingCard[]] => {
             const [drawnCard, ...remainingDeck] = currentDeck
             playCardSound()
-            return [drawnCard, remainingDeck]
+            return [{ ...drawnCard, hidden }, remainingDeck]
         },
         [playCardSound]
     )
@@ -57,17 +57,21 @@ export function useGameLogic(playCardSound: () => void, playMixingSound: () => v
         let newDeck = initializeDeck()
 
         const dealCard = async (
-            setHand: React.Dispatch<React.SetStateAction<PlayingCard[]>>
+            setHand: React.Dispatch<React.SetStateAction<PlayingCard[]>>,
+            hidden: boolean = false
         ) => {
-            const [card, updatedDeck] = drawCard(newDeck)
+            const [card, updatedDeck] = drawCard(newDeck, hidden)
             newDeck = updatedDeck
             setHand(prevHand => [...prevHand, card])
             await new Promise(resolve => setTimeout(resolve, 500))
+            return card
         }
 
-        await dealCard(setPlayerHand)
-        await dealCard(setDealerHand)
-        await dealCard(setPlayerHand)
+        newPlayerHand.push(await dealCard(setPlayerHand))
+        newDealerHand.push(await dealCard(setDealerHand))
+        newPlayerHand.push(await dealCard(setPlayerHand))
+        const lastDealerCard = await dealCard(setDealerHand, true)
+        newDealerHand.push({ ...lastDealerCard, hidden: false })
 
         setDeck(newDeck)
         setIsDealing(false)
@@ -106,8 +110,15 @@ export function useGameLogic(playCardSound: () => void, playMixingSound: () => v
         if (gameState !== null || isDealing) return
 
         setIsDealing(true)
-        let currentDealerHand = [...dealerHand]
+        const revealedDealerHand = dealerHand.map(card => ({ ...card, hidden: false }))
+        setDealerHand(revealedDealerHand)
+        playCardSound()
+
+        await new Promise(resolve => setTimeout(resolve, 500))
+
+        let currentDealerHand = revealedDealerHand
         let currentDeck = [...deck]
+
         while (calculateHandValue(currentDealerHand) < 17 && currentDeck.length > 0) {
             const [newCard, newDeck] = drawCard(currentDeck)
             currentDealerHand = [...currentDealerHand, newCard]
@@ -132,6 +143,7 @@ export function useGameLogic(playCardSound: () => void, playMixingSound: () => v
         let value = 0
         let aces = 0
         for (const card of hand) {
+            if (card.hidden) continue
             if (card.value === 'A') {
                 aces += 1
                 value += 11

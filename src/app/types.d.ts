@@ -1,6 +1,7 @@
 type PlayingCard = {
     suit: string
     value: string
+    hidden: boolean
 }
 
 type PlayingCardProps = {

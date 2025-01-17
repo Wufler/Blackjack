@@ -20,7 +20,7 @@ export default function BlackjackGame({ streaks }: { streaks: Streak[] }) {
 		dealerHand,
 		gameState,
 		streak,
-		previousStreak, // Add this
+		previousStreak,
 		isDealing,
 		hit,
 		stand,

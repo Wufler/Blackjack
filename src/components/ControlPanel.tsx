@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/button'
 import { SubmitStreak } from './SubmitStreak'
 import { motion } from 'motion/react'
 import { PlusIcon, HandIcon, PlayIcon } from 'lucide-react'
+import { useEffect } from 'react'
 
 export function ControlPanel({
 	gameState,
@@ -12,6 +13,22 @@ export function ControlPanel({
 	playAgain,
 	resetStreak,
 }: ControlPanelProps) {
+	useEffect(() => {
+		const handleKeyPress = (e: KeyboardEvent) => {
+			if (document.activeElement?.tagName === 'INPUT') return
+
+			if (gameState === null && !isDealing) {
+				if (e.key === 'q') hit()
+				if (e.key === 'w') stand()
+			} else if (gameState !== null) {
+				if (e.key === 'e' || e.key === ' ') playAgain()
+			}
+		}
+
+		window.addEventListener('keydown', handleKeyPress)
+		return () => window.removeEventListener('keydown', handleKeyPress)
+	}, [gameState, isDealing, hit, stand, playAgain])
+
 	return (
 		<motion.div
 			initial={{ opacity: 0, y: 20 }}
