@@ -43,7 +43,7 @@ export function ControlPanel({
 					<div className="flex sm:flex-row flex-col w-full gap-4">
 						<Button
 							onClick={playAgain}
-							className="w-full bg-blue-600 text-white border-none py-6 px-8 rounded-lg text-lg hover:bg-indigo-700"
+							className="w-full bg-blue-600 text-white border-none py-6 px-8 rounded-lg text-lg hover:bg-blue-700"
 						>
 							<PlayIcon className="size-6" />
 							Play Again

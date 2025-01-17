@@ -7,7 +7,7 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 export default memo(function LeaderBoard({ streaks }: { streaks: Streak[] }) {
 	if (!streaks.length) {
 		return (
-			<div className="bg-gray-800 rounded-lg p-4 shadow-lg w-full md:w-80 md:h-[624px]">
+			<div className="bg-gray-800 rounded-lg p-4 shadow-lg w-full md:w-80 md:h-[610px]">
 				<div className="flex flex-col h-full items-center justify-center">
 					<Flame className="size-8 text-orange-500 mb-2" />
 					<p className="text-lg">No streaks yet</p>
@@ -17,7 +17,7 @@ export default memo(function LeaderBoard({ streaks }: { streaks: Streak[] }) {
 	}
 
 	return (
-		<div className="md:bg-gray-800 rounded-lg md:p-4 md:shadow-lg w-full md:w-80 md:h-[624px]">
+		<div className="md:bg-gray-800 rounded-lg md:p-4 md:shadow-lg w-full md:w-80 md:h-[610px]">
 			<motion.div initial={false} className="flex flex-col h-full">
 				<h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
 					<Flame className="size-6 text-orange-500" />

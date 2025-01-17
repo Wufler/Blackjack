@@ -1,5 +1,5 @@
 import { useState, useTransition } from 'react'
-import { Trophy } from 'lucide-react'
+import { Loader2, Trophy } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import {
@@ -9,6 +9,11 @@ import {
 } from '@/components/ui/popover'
 import { saveStreak } from '@/app/actions'
 import { toast } from 'sonner'
+import {
+	RegExpMatcher,
+	englishDataset,
+	englishRecommendedTransformers,
+} from 'obscenity'
 
 export function SubmitStreak({
 	streak,
@@ -20,10 +25,20 @@ export function SubmitStreak({
 	const [playerName, setPlayerName] = useState('')
 	const [isPending, startTransition] = useTransition()
 
+	const matcher = new RegExpMatcher({
+		...englishDataset.build(),
+		...englishRecommendedTransformers,
+	})
+
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault()
 		startTransition(async () => {
 			if (streak > 0 && playerName) {
+				const matches = matcher.getAllMatches(playerName)
+				if (matches.length > 0) {
+					toast.error('Please use another name.')
+					return
+				}
 				await saveStreak(streak, playerName)
 				toast.success(`Your streak of ${streak} has been submitted!`)
 				onSubmit()
@@ -48,7 +63,7 @@ export function SubmitStreak({
 						<Input
 							id="name"
 							type="text"
-							placeholder="Insert your name..."
+							placeholder="Name"
 							value={playerName}
 							maxLength={25}
 							required
@@ -59,11 +74,13 @@ export function SubmitStreak({
 					<Button
 						type="submit"
 						disabled={isPending}
-						className="w-full bg-gradient-to-r from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700 text-white transition-all duration-200"
+						className="w-full bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white transition-all duration-200"
 					>
-						{isPending
-							? 'Publishing...'
-							: `Publish ${streak} Win${streak > 1 ? 's' : ''}`}
+						{isPending ? (
+							<Loader2 className="animate-spin" />
+						) : (
+							`Publish ${streak} Win${streak > 1 ? 's' : ''}`
+						)}
 					</Button>
 				</form>
 			</PopoverContent>

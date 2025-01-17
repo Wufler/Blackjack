@@ -59,7 +59,7 @@ function HandDisplay({
 					<span className="opacity-50">{title}</span>
 				</div>
 				{isPlayer && streak !== undefined && (
-					<div className="px-4 py-2 rounded-lg text-lg font-semibold flex items-center gap-2">
+					<div className="rounded-lg text-lg font-semibold flex items-center gap-2">
 						<Trophy className="text-yellow-400 size-5" />
 						<div className="flex items-center gap-1">
 							<NumberFlow value={streak} />
