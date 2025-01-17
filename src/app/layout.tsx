@@ -15,10 +15,12 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
 	title: 'Blackjack',
-	description: 'Try to win as many games in a row!',
+	description:
+		'Try to build up a streak and submit your score to the leaderboard!',
 	openGraph: {
 		title: 'Blackjack',
-		description: 'Try to win as many games in a row!',
+		description:
+			'Try to build up a streak and submit your score to the leaderboard!',
 		url: 'https://blackyjack.vercel.app',
 		images: [
 			{
