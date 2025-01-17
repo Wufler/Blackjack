@@ -20,7 +20,7 @@ export function ControlPanel({
 			if (gameState === null && !isDealing) {
 				if (e.key === 'q') hit()
 				if (e.key === 'w') stand()
-			} else if (gameState !== null) {
+			} else if (gameState !== null && !isDealing) {
 				if (e.key === 'e' || e.key === ' ') playAgain()
 			}
 		}
@@ -60,12 +60,19 @@ export function ControlPanel({
 					<div className="flex sm:flex-row flex-col w-full gap-4">
 						<Button
 							onClick={playAgain}
-							className="w-full bg-blue-600 text-white border-none py-6 px-8 rounded-lg text-lg hover:bg-blue-700"
+							disabled={isDealing}
+							className="w-full bg-blue-600 text-white border-none py-6 px-8 rounded-lg text-lg hover:bg-blue-700 disabled:opacity-50"
 						>
 							<PlayIcon className="size-6" />
 							Play Again
 						</Button>
-						{streak > 0 && <SubmitStreak streak={streak} onSubmit={resetStreak} />}
+						{streak > 0 && (
+							<SubmitStreak
+								streak={streak}
+								onSubmit={resetStreak}
+								isDealing={isDealing}
+							/>
+						)}
 					</div>
 				)}
 			</div>

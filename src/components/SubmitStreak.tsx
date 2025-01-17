@@ -17,9 +17,11 @@ import {
 
 export function SubmitStreak({
 	streak,
+	isDealing,
 	onSubmit,
 }: {
 	streak: number
+	isDealing: boolean
 	onSubmit: () => void
 }) {
 	const [playerName, setPlayerName] = useState('')
@@ -49,7 +51,10 @@ export function SubmitStreak({
 	return (
 		<Popover>
 			<PopoverTrigger asChild>
-				<Button className="w-full bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 text-white border-none py-6 px-8 rounded-lg text-lg transition-all duration-200">
+				<Button
+					disabled={isDealing}
+					className="w-full bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 text-white border-none py-6 px-8 rounded-lg text-lg transition-all duration-200"
+				>
 					<Trophy className="size-6" />
 					Submit Streak
 				</Button>
@@ -73,7 +78,7 @@ export function SubmitStreak({
 					</div>
 					<Button
 						type="submit"
-						disabled={isPending}
+						disabled={isPending || isDealing}
 						className="w-full bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white transition-all duration-200"
 					>
 						{isPending ? (

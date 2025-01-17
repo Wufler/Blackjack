@@ -10,6 +10,7 @@ export function GameBoard({
 	calculateHandValue,
 	streak,
 	previousStreak,
+	isDealing,
 }: GameBoardProps) {
 	return (
 		<div className="grid gap-8">
@@ -21,6 +22,7 @@ export function GameBoard({
 				calculateHandValue={calculateHandValue}
 				streak={streak}
 				previousStreak={previousStreak}
+				isDealing={isDealing}
 			/>
 			<HandDisplay
 				title="You"
@@ -30,6 +32,7 @@ export function GameBoard({
 				calculateHandValue={calculateHandValue}
 				streak={streak}
 				previousStreak={previousStreak}
+				isDealing={isDealing}
 			/>
 		</div>
 	)
@@ -43,20 +46,31 @@ function HandDisplay({
 	calculateHandValue,
 	streak,
 	previousStreak,
+	isDealing,
 }: HandDisplayProps) {
+	const aceCount = hand.filter(card => !card.hidden && card.value === 'A').length
+	const value = calculateHandValue(hand)
+	const softValue = value - 10
+	const showSoftValue = aceCount > 0 && softValue >= 2 && value <= 21
+
 	return (
 		<div className="relative">
 			<div className="flex items-center justify-between mb-4">
 				<div
-					className={`text-lg font-semibold flex justify-center items-end gap-2 ${
+					className={`text-lg font-semibold flex justify-center items-end ${
 						title === 'You' ? 'text-white' : 'text-blue-400'
 					}`}
 				>
+					{showSoftValue && (
+						<span className="text-2xl font-bold self-center mr-1">
+							{value <= 21 ? `${softValue}, ` : `busted from ${value}`}
+						</span>
+					)}
 					<NumberFlow
-						value={calculateHandValue(hand)}
+						value={value > 21 && showSoftValue ? softValue : value}
 						className="text-2xl font-bold"
 					/>
-					<span className="opacity-50">{title}</span>
+					<span className="opacity-50 ml-2">{title}</span>
 				</div>
 				{isPlayer && streak !== undefined && (
 					<div className="rounded-lg text-lg font-semibold flex items-center gap-2">
@@ -79,6 +93,7 @@ function HandDisplay({
 							result={gameState}
 							isPlayer={isPlayer}
 							index={index}
+							isDealing={isDealing}
 						/>
 					))}
 				</AnimatePresence>

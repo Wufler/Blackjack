@@ -7,14 +7,15 @@ export function useGameLogic(playCardSound: () => void, playMixingSound: () => v
     const [gameState, setGameState] = useState<GameResult>(null)
     const [streak, setStreak] = useState(0)
     const [isDealing, setIsDealing] = useState(false)
-    const [previousStreak, setPreviousStreak] = useState(0);
+    const [previousStreak, setPreviousStreak] = useState(0)
 
     const endGameRef = useRef<(result: GameResult) => void>(null)
+    const currentDeckRef = useRef<PlayingCard[]>([])
 
     const handleGameLoss = useCallback(() => {
-        setPreviousStreak(streak);
-        setStreak(0);
-    }, [streak]);
+        setPreviousStreak(streak)
+        setStreak(0)
+    }, [streak])
 
     const endGame = useCallback((result: GameResult) => {
         setGameState(result)
@@ -49,46 +50,89 @@ export function useGameLogic(playCardSound: () => void, playMixingSound: () => v
         [playCardSound]
     )
 
+    const calculateHandValue = useCallback((hand: PlayingCard[], includeHidden: boolean = false) => {
+        let value = 0;
+        let aces = 0;
+
+        for (const card of hand) {
+            if (card.hidden && !includeHidden) continue;
+            if (card.value === 'A') {
+                aces += 1;
+            } else if (['K', 'Q', 'J'].includes(card.value)) {
+                value += 10;
+            } else {
+                value += parseInt(card.value);
+            }
+        }
+
+        for (let i = 0; i < aces; i++) {
+            value += (value + 11 <= 21) ? 11 : 1;
+        }
+
+        return value;
+    }, []);
+
+    const checkInitialBlackjack = useCallback((pHand: PlayingCard[], dHand: PlayingCard[]) => {
+        const playerValue = calculateHandValue(pHand)
+        const dealerValue = calculateHandValue(dHand, true)
+
+        if (playerValue === 21 && dealerValue === 21) {
+            setDealerHand(dHand.map(card => ({ ...card, hidden: false })))
+            return 'tie'
+        } else if (playerValue === 21) {
+            setDealerHand(dHand.map(card => ({ ...card, hidden: false })))
+            return 'win'
+        } else if (dealerValue === 21) {
+            setDealerHand(dHand.map(card => ({ ...card, hidden: false })))
+            return 'lose'
+        }
+        return null
+    }, [calculateHandValue])
+
     const startGame = useCallback(async () => {
         setIsDealing(true)
         playMixingSound()
-        const newPlayerHand: PlayingCard[] = []
-        const newDealerHand: PlayingCard[] = []
-        let newDeck = initializeDeck()
+
+        setPlayerHand([])
+        setDealerHand([])
+
+        const newDeck = initializeDeck()
+        currentDeckRef.current = newDeck
+
+        let currentPlayerHand: PlayingCard[] = []
+        let currentDealerHand: PlayingCard[] = []
 
         const dealCard = async (
             setHand: React.Dispatch<React.SetStateAction<PlayingCard[]>>,
+            currentHand: PlayingCard[],
             hidden: boolean = false
-        ) => {
-            const [card, updatedDeck] = drawCard(newDeck, hidden)
-            newDeck = updatedDeck
-            setHand(prevHand => [...prevHand, card])
+        ): Promise<PlayingCard[]> => {
+            const [card, updatedDeck] = drawCard(currentDeckRef.current, hidden)
+            currentDeckRef.current = updatedDeck
+            const newHand = [...currentHand, card]
+            setHand(newHand)
             await new Promise(resolve => setTimeout(resolve, 500))
-            return card
+            return newHand
         }
 
-        newPlayerHand.push(await dealCard(setPlayerHand))
-        newDealerHand.push(await dealCard(setDealerHand))
-        newPlayerHand.push(await dealCard(setPlayerHand))
-        const lastDealerCard = await dealCard(setDealerHand, true)
-        newDealerHand.push({ ...lastDealerCard, hidden: false })
+        currentPlayerHand = await dealCard(setPlayerHand, currentPlayerHand)
+        currentDealerHand = await dealCard(setDealerHand, currentDealerHand)
+        currentPlayerHand = await dealCard(setPlayerHand, currentPlayerHand)
+        currentDealerHand = await dealCard(setDealerHand, currentDealerHand, true)
 
-        setDeck(newDeck)
+        setDeck(currentDeckRef.current)
         setIsDealing(false)
 
-        const playerValue = calculateHandValue(newPlayerHand)
-        const dealerValue = calculateHandValue(newDealerHand)
+        const result = checkInitialBlackjack(currentPlayerHand, currentDealerHand)
 
-        if (playerValue === 21) {
-            endGameRef.current?.('win')
-        } else if (dealerValue === 21) {
-            endGameRef.current?.('lose')
+        if (result) {
+            endGameRef.current?.(result)
         } else {
             setGameState(null)
         }
-    }, [initializeDeck, drawCard, playMixingSound])
+    }, [initializeDeck, drawCard, playMixingSound, checkInitialBlackjack])
 
-    const hit = async () => {
+    const hit = useCallback(async () => {
         if (deck.length > 0 && gameState === null && !isDealing) {
             setIsDealing(true)
             const [newCard, newDeck] = drawCard(deck)
@@ -97,76 +141,65 @@ export function useGameLogic(playCardSound: () => void, playMixingSound: () => v
             setDeck(newDeck)
             await new Promise(resolve => setTimeout(resolve, 500))
             setIsDealing(false)
+
             const newHandValue = calculateHandValue(newHand)
             if (newHandValue > 21) {
+                setDealerHand(prev => prev.map(card => ({ ...card, hidden: false })))
                 endGameRef.current?.('lose')
             } else if (newHandValue === 21) {
+                setDealerHand(prev => prev.map(card => ({ ...card, hidden: false })))
                 endGameRef.current?.('win')
             }
         }
-    }
+    }, [deck, gameState, isDealing, playerHand, drawCard, calculateHandValue])
 
-    const stand = async () => {
+    const stand = useCallback(async () => {
         if (gameState !== null || isDealing) return
 
         setIsDealing(true)
+
         const revealedDealerHand = dealerHand.map(card => ({ ...card, hidden: false }))
         setDealerHand(revealedDealerHand)
         playCardSound()
-
         await new Promise(resolve => setTimeout(resolve, 500))
 
         let currentDealerHand = revealedDealerHand
         let currentDeck = [...deck]
 
-        while (calculateHandValue(currentDealerHand) < 17 && currentDeck.length > 0) {
+        while (currentDeck.length > 0) {
+            const dealerValue = calculateHandValue(currentDealerHand)
+            const hasAce = currentDealerHand.some(card => card.value === 'A')
+            const isSoft17 = dealerValue === 17 && hasAce
+
+            if (dealerValue >= 17 && !isSoft17) break;
+
             const [newCard, newDeck] = drawCard(currentDeck)
             currentDealerHand = [...currentDealerHand, newCard]
             currentDeck = newDeck
             setDealerHand(currentDealerHand)
+            setDeck(currentDeck)
             await new Promise(resolve => setTimeout(resolve, 500))
         }
-        setDeck(currentDeck)
+
         setIsDealing(false)
+
         const playerValue = calculateHandValue(playerHand)
         const dealerValue = calculateHandValue(currentDealerHand)
-        if (dealerValue > 21 || playerValue > dealerValue) {
+
+        if (dealerValue > 21) {
+            endGameRef.current?.('win')
+        } else if (playerValue > dealerValue) {
             endGameRef.current?.('win')
         } else if (playerValue < dealerValue) {
             endGameRef.current?.('lose')
         } else {
             endGameRef.current?.('tie')
         }
-    }
+    }, [gameState, isDealing, dealerHand, deck, playerHand, playCardSound, drawCard, calculateHandValue])
 
-    const calculateHandValue = (hand: PlayingCard[]) => {
-        let value = 0
-        let aces = 0
-        for (const card of hand) {
-            if (card.hidden) continue
-            if (card.value === 'A') {
-                aces += 1
-                value += 11
-            } else if (['K', 'Q', 'J'].includes(card.value)) {
-                value += 10
-            } else {
-                value += parseInt(card.value)
-            }
-        }
-        while (value > 21 && aces > 0) {
-            value -= 10
-            aces -= 1
-        }
-        return value
-    }
-
-    const playAgain = () => {
-        setPlayerHand([])
-        setDealerHand([])
-        setDeck([])
-        setGameState(null)
+    const playAgain = useCallback(() => {
         startGame()
-    }
+    }, [startGame])
 
     const resetStreak = useCallback(() => {
         setStreak(0)
