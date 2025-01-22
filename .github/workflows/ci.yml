@@ -1,4 +1,4 @@
-name: Vitest
+name: Check game logic
 
 on:
  pull_request:
@@ -21,6 +21,9 @@ jobs:
      with:
       node-version: ${{ matrix.node-version }}
       cache: 'pnpm'
+
+   - name: Install pnpm
+     run: npm install -g pnpm
 
    - name: Install dependencies
      run: pnpm install
