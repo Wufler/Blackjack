@@ -12,6 +12,7 @@
 		"test": "vitest"
 	},
 	"dependencies": {
+		"@marsidev/react-turnstile": "^1.1.0",
 		"@number-flow/react": "^0.5.5",
 		"@radix-ui/react-label": "^2.1.1",
 		"@radix-ui/react-popover": "^1.1.4",
