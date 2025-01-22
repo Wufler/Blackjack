@@ -21,8 +21,10 @@ export function PlayingCard({
 	result,
 	isPlayer,
 	index,
+	isDealing,
 }: PlayingCardProps) {
 	const getBorderColor = () => {
+		if (isDealing) return 'border-blue-500'
 		if (result === null) return 'border-blue-500'
 		if (result === 'tie') return 'border-orange-500'
 		if (isPlayer) {
@@ -31,13 +33,6 @@ export function PlayingCard({
 			return result === 'lose' ? 'border-green-500' : 'border-red-500'
 		}
 	}
-
-	const cardStyle = {
-		position: 'absolute',
-		top: `${index * 15}px`,
-		left: `${index * 30}px`,
-		zIndex: index,
-	} as const
 
 	return (
 		<motion.div
@@ -50,7 +45,12 @@ export function PlayingCard({
 				delay: index * 0.1,
 				layout: { duration: 0.3 },
 			}}
-			style={cardStyle}
+			style={{
+				position: 'absolute',
+				top: `${index * 15}px`,
+				left: `${index * 30}px`,
+				zIndex: index,
+			}}
 		>
 			<AnimatePresence mode="wait">
 				{card.hidden ? (

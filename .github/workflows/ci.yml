@@ -1,0 +1,32 @@
+name: Check game logic
+
+on:
+ pull_request:
+  branches: [main, beta]
+
+jobs:
+ build:
+  runs-on: ubuntu-latest
+
+  strategy:
+   matrix:
+    node-version: [22.x]
+
+  steps:
+   - name: Checkout code
+     uses: actions/checkout@v3
+
+   - name: Install pnpm
+     run: npm install -g pnpm
+
+   - name: Use Node.js ${{ matrix.node-version }}
+     uses: actions/setup-node@v3
+     with:
+      node-version: ${{ matrix.node-version }}
+      cache: 'pnpm'
+
+   - name: Install dependencies
+     run: pnpm install
+
+   - name: Run tests
+     run: pnpm test

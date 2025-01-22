@@ -97,6 +97,7 @@ export default function BlackjackGame({ streaks }: { streaks: Streak[] }) {
 														calculateHandValue={calculateHandValue}
 														streak={streak}
 														previousStreak={previousStreak}
+														isDealing={isDealing}
 													/>
 													<ControlPanel
 														gameState={gameState}
@@ -157,6 +158,7 @@ export default function BlackjackGame({ streaks }: { streaks: Streak[] }) {
 													calculateHandValue={calculateHandValue}
 													streak={streak}
 													previousStreak={previousStreak}
+													isDealing={isDealing}
 												/>
 												<ControlPanel
 													gameState={gameState}
