@@ -8,7 +8,8 @@
 		"start": "next start",
 		"lint": "next lint",
 		"prisma": "npx prisma generate && npx prisma migrate dev",
-		"docker": "docker-compose up -d"
+		"docker": "docker-compose up -d",
+		"test": "vitest"
 	},
 	"dependencies": {
 		"@number-flow/react": "^0.5.5",
@@ -35,14 +36,20 @@
 	"devDependencies": {
 		"@eslint/eslintrc": "^3",
 		"@prisma/client": "^6.2.1",
+		"@testing-library/dom": "^10.4.0",
+		"@testing-library/react": "^16.2.0",
 		"@types/node": "^22",
 		"@types/react": "^19",
 		"@types/react-dom": "^19",
+		"@vitejs/plugin-react": "^4.3.4",
 		"eslint": "^9",
 		"eslint-config-next": "15.1.5",
+		"jsdom": "^26.0.0",
 		"postcss": "^8",
 		"prisma": "^6.2.1",
 		"tailwindcss": "^3.4.17",
-		"typescript": "^5"
+		"typescript": "^5",
+		"vite-tsconfig-paths": "^5.1.4",
+		"vitest": "^3.0.3"
 	}
 }

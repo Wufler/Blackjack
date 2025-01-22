@@ -50,31 +50,46 @@ export function useGameLogic(playCardSound: () => void, playMixingSound: () => v
         [playCardSound]
     )
 
-    const calculateHandValue = useCallback((hand: PlayingCard[], includeHidden: boolean = false) => {
-        let value = 0;
-        let aces = 0;
+    const calculateHandValue = useCallback((hand: PlayingCard[], includeHidden: boolean = false): HandValue => {
+        let baseValue = 0;
+        let numAces = 0;
 
         for (const card of hand) {
             if (card.hidden && !includeHidden) continue;
             if (card.value === 'A') {
-                aces += 1;
+                numAces++;
             } else if (['K', 'Q', 'J'].includes(card.value)) {
-                value += 10;
+                baseValue += 10;
             } else {
-                value += parseInt(card.value);
+                baseValue += parseInt(card.value, 10);
             }
         }
 
-        for (let i = 0; i < aces; i++) {
-            value += (value + 11 <= 21) ? 11 : 1;
+        if (numAces === 0) {
+            return {
+                hard: baseValue,
+                soft: baseValue,
+                best: baseValue,
+            };
         }
 
-        return value;
+        const hardTotal = baseValue + numAces;
+
+        let softTotal = hardTotal;
+        if (hardTotal + 10 <= 21) {
+            softTotal += 10;
+        }
+
+        return {
+            hard: hardTotal,
+            soft: softTotal,
+            best: softTotal <= 21 ? softTotal : hardTotal,
+        };
     }, []);
 
     const checkInitialBlackjack = useCallback((pHand: PlayingCard[], dHand: PlayingCard[]) => {
-        const playerValue = calculateHandValue(pHand)
-        const dealerValue = calculateHandValue(dHand, true)
+        const playerValue = calculateHandValue(pHand).best
+        const dealerValue = calculateHandValue(dHand, true).best
 
         if (playerValue === 21 && dealerValue === 21) {
             setDealerHand(dHand.map(card => ({ ...card, hidden: false })))
@@ -142,7 +157,7 @@ export function useGameLogic(playCardSound: () => void, playMixingSound: () => v
             await new Promise(resolve => setTimeout(resolve, 500))
             setIsDealing(false)
 
-            const newHandValue = calculateHandValue(newHand)
+            const newHandValue = calculateHandValue(newHand).best
             if (newHandValue > 21) {
                 setDealerHand(prev => prev.map(card => ({ ...card, hidden: false })))
                 endGameRef.current?.('lose')
@@ -167,11 +182,8 @@ export function useGameLogic(playCardSound: () => void, playMixingSound: () => v
         let currentDeck = [...deck]
 
         while (currentDeck.length > 0) {
-            const dealerValue = calculateHandValue(currentDealerHand)
-            const hasAce = currentDealerHand.some(card => card.value === 'A')
-            const isSoft17 = dealerValue === 17 && hasAce
-
-            if (dealerValue >= 17 && !isSoft17) break;
+            const dealerValue = calculateHandValue(currentDealerHand).best
+            if (dealerValue >= 17) break;
 
             const [newCard, newDeck] = drawCard(currentDeck)
             currentDealerHand = [...currentDealerHand, newCard]
@@ -183,8 +195,8 @@ export function useGameLogic(playCardSound: () => void, playMixingSound: () => v
 
         setIsDealing(false)
 
-        const playerValue = calculateHandValue(playerHand)
-        const dealerValue = calculateHandValue(currentDealerHand)
+        const playerValue = calculateHandValue(playerHand).best
+        const dealerValue = calculateHandValue(currentDealerHand).best
 
         if (dealerValue > 21) {
             endGameRef.current?.('win')

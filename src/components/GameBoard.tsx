@@ -48,10 +48,8 @@ function HandDisplay({
 	previousStreak,
 	isDealing,
 }: HandDisplayProps) {
-	const aceCount = hand.filter(card => !card.hidden && card.value === 'A').length
-	const value = calculateHandValue(hand)
-	const softValue = value - 10
-	const showSoftValue = aceCount > 0 && softValue >= 2 && value <= 21
+	const values = calculateHandValue(hand)
+	const showBothValues = values.soft !== values.hard && values.soft <= 21
 
 	return (
 		<div className="relative">
@@ -61,15 +59,17 @@ function HandDisplay({
 						title === 'You' ? 'text-white' : 'text-blue-400'
 					}`}
 				>
-					{showSoftValue && (
-						<span className="text-2xl font-bold self-center mr-1">
-							{value <= 21 ? `${softValue}, ` : `busted from ${value}`}
-						</span>
-					)}
-					<NumberFlow
-						value={value > 21 && showSoftValue ? softValue : value}
-						className="text-2xl font-bold"
-					/>
+					<div className="flex items-baseline">
+						{showBothValues ? (
+							<>
+								<NumberFlow value={values.hard} className="text-2xl font-bold" />
+								<span className="text-2xl font-bold mr-1">,</span>
+								<NumberFlow value={values.soft} className="text-2xl font-bold" />
+							</>
+						) : (
+							<NumberFlow value={values.best} className="text-2xl font-bold" />
+						)}
+					</div>
 					<span className="opacity-50 ml-2">{title}</span>
 				</div>
 				{isPlayer && streak !== undefined && (

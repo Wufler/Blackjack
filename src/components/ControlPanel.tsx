@@ -19,7 +19,7 @@ export function ControlPanel({
 
 			if (gameState === null && !isDealing) {
 				if (e.key === 'q') hit()
-				if (e.key === 'w') stand()
+				if (e.key === 'w' || e.key === ' ') stand()
 			} else if (gameState !== null && !isDealing) {
 				if (e.key === 'e' || e.key === ' ') playAgain()
 			}
