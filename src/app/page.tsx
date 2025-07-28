@@ -1,9 +1,8 @@
+export const dynamic = 'force-dynamic'
 import Game from '@/components/BlackjackGame'
-import { getTopStreaks } from './actions'
-import { connection } from 'next/server'
+import { getTopStreaks } from '@/index'
 
 export default async function Home() {
-	await connection()
 	const streaks = await getTopStreaks()
 	return <Game streaks={streaks} />
 }
