@@ -54,7 +54,7 @@ export function SubmitStreak({
 			<PopoverTrigger asChild>
 				<Button
 					disabled={isDealing}
-					className="w-1/2 bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 text-white border-none py-6 px-8 rounded-lg text-lg transition-all duration-200"
+					className="w-full bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 text-white border-none py-6 px-8 rounded-lg text-lg transition-all duration-200"
 				>
 					<Trophy className="size-6" />
 					Submit Streak

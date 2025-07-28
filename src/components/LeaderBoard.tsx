@@ -18,7 +18,7 @@ export default memo(function LeaderBoard({ streaks }: { streaks: Streak[] }) {
 
 	return (
 		<div className="md:bg-gray-800 rounded-lg md:p-4 md:shadow-lg w-full md:w-80 md:h-[610px]">
-			<motion.div initial={false} className="flex flex-col h-full md:h-[530px]">
+			<motion.div initial={false} className="flex flex-col h-full">
 				<h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
 					<Flame className="size-6 text-orange-500" />
 					Top 10 Streaks
