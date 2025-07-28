@@ -1,14 +1,13 @@
 import { useState, useTransition } from 'react'
-import { Loader2, Trophy } from 'lucide-react'
+import { Trophy } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Turnstile } from '@marsidev/react-turnstile'
 import {
 	Popover,
 	PopoverContent,
 	PopoverTrigger,
 } from '@/components/ui/popover'
-import { saveStreak } from '@/app/actions'
+import { saveStreak } from '@/index'
 import { toast } from 'sonner'
 import {
 	RegExpMatcher,
@@ -26,7 +25,6 @@ export function SubmitStreak({
 	onSubmit: () => void
 }) {
 	const [playerName, setPlayerName] = useState('')
-	const [token, setToken] = useState<string | null>(null)
 	const [isPending, startTransition] = useTransition()
 
 	const matcher = new RegExpMatcher({
@@ -36,10 +34,7 @@ export function SubmitStreak({
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault()
-		if (!token) {
-			toast.error('Please wait for verification')
-			return
-		}
+
 		startTransition(async () => {
 			if (streak > 0 && playerName) {
 				const matches = matcher.getAllMatches(playerName)
@@ -55,13 +50,7 @@ export function SubmitStreak({
 	}
 
 	return (
-		<Popover
-			onOpenChange={open => {
-				if (!open) {
-					setToken(null)
-				}
-			}}
-		>
+		<Popover>
 			<PopoverTrigger asChild>
 				<Button
 					disabled={isDealing}
@@ -88,24 +77,12 @@ export function SubmitStreak({
 							className="bg-gray-700 mt-1 text-white border-gray-600 focus:border-blue-500"
 						/>
 					</div>
-					<Turnstile
-						siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!}
-						onSuccess={setToken}
-						className="!mt-0"
-					/>
 					<Button
 						type="submit"
-						disabled={isPending || isDealing || !token}
+						disabled={isPending || isDealing}
 						className="w-full bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white transition-all duration-200"
 					>
-						{isPending || !token ? (
-							<div className="flex items-center justify-center gap-2">
-								<Loader2 className="animate-spin" />
-								Verifying...
-							</div>
-						) : (
-							`Publish ${streak} Win${streak > 1 ? 's' : ''}`
-						)}
+						Publish {streak} Win{streak > 1 ? 's' : ''}
 					</Button>
 				</form>
 			</PopoverContent>

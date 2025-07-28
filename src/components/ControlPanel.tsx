@@ -42,7 +42,7 @@ export function ControlPanel({
 						<Button
 							onClick={hit}
 							disabled={gameState !== null || isDealing}
-							className="w-full bg-emerald-600 text-white border-none py-6 px-8 rounded-lg text-lg transform transition-all hover:scale-105 hover:bg-emerald-700 disabled:opacity-50"
+							className="w-full bg-emerald-600 text-white border-none py-6 px-8 rounded-lg text-lg transform transition-all hover:scale-102 hover:bg-emerald-700 disabled:opacity-50"
 						>
 							<PlusIcon className="size-6" />
 							Hit
@@ -50,7 +50,7 @@ export function ControlPanel({
 						<Button
 							onClick={stand}
 							disabled={gameState !== null || isDealing}
-							className="w-full bg-rose-600 text-white border-none py-6 px-8 rounded-lg text-lg transform transition-all hover:scale-105 hover:bg-rose-700 disabled:opacity-50"
+							className="w-full bg-rose-600 text-white border-none py-6 px-8 rounded-lg text-lg transform transition-all hover:scale-102 hover:bg-rose-700 disabled:opacity-50"
 						>
 							<HandIcon className="size-6" />
 							Stand
