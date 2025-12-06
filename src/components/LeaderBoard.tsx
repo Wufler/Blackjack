@@ -32,10 +32,10 @@ export default memo(function LeaderBoard({ streaks }: { streaks: Streak[] }) {
 								animate={{ opacity: 1, y: 0 }}
 								transition={{ delay: index * 0.04 }}
 								className={`bg-gray-700 rounded-lg p-3 flex items-center relative overflow-hidden ${
-									index === 0 ? 'bg-gradient-to-r to-yellow-500 from-yellow-600' : ''
-								} ${
-									index === 1 ? 'bg-gradient-to-r to-slate-400 from-slate-500' : ''
-								} ${index === 2 ? 'bg-gradient-to-r to-amber-700 from-amber-800' : ''}`}
+									index === 0 ? 'bg-linear-to-r to-yellow-500 from-yellow-600' : ''
+								} ${index === 1 ? 'bg-linear-to-r to-slate-400 from-slate-500' : ''} ${
+									index === 2 ? 'bg-linear-to-r to-amber-700 from-amber-800' : ''
+								}`}
 							>
 								<span className="absolute inset-y-0 right-0 text-8xl font-black tracking-tight flex items-center pr-2">
 									{index < 1 ? (

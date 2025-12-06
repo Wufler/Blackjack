@@ -8,6 +8,7 @@ import {
 	PopoverContent,
 	PopoverTrigger,
 } from '@/components/ui/popover'
+import Link from 'next/link'
 
 export default memo(function Footer() {
 	const [isOpen, setIsOpen] = useState(false)
@@ -16,7 +17,10 @@ export default memo(function Footer() {
 		<footer className="w-full text-gray-300 py-4 px-6">
 			<div className="flex items-center md:justify-evenly justify-between md:py-2">
 				<div>
-					<p>&copy; 2025 Wolfey</p>
+					2025,{' '}
+					<Link href="https://wolfey.me" target="_blank">
+						wolfey.me
+					</Link>
 				</div>
 				<div className="flex items-center gap-4">
 					<div className="md:flex items-center hidden">
@@ -31,7 +35,7 @@ export default memo(function Footer() {
 								</div>
 							</PopoverTrigger>
 							<PopoverContent
-								className="max-w-56 bg-gradient-to-b to-gray-800 from-gray-900 border-gray-700 p-4 rounded-lg shadow-lg"
+								className="max-w-56 bg-linear-to-b to-gray-800 from-gray-900 border-gray-700 p-4 rounded-lg shadow-lg"
 								sideOffset={12}
 								onMouseEnter={() => setIsOpen(true)}
 								onMouseLeave={() => setIsOpen(false)}

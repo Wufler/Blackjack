@@ -54,7 +54,7 @@ export function SubmitStreak({
 			<PopoverTrigger asChild>
 				<Button
 					disabled={isDealing}
-					className="w-full bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 text-white border-none py-6 px-8 rounded-lg text-lg transition-all duration-200"
+					className="w-full bg-linear-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 text-white border-none py-6 px-8 rounded-lg text-lg transition-all duration-200"
 				>
 					<Trophy className="size-6" />
 					Submit Streak
@@ -62,7 +62,7 @@ export function SubmitStreak({
 			</PopoverTrigger>
 			<PopoverContent
 				side="top"
-				className="w-full bg-gradient-to-b from-gray-800 to-gray-900 border-gray-700 p-4 rounded-xl shadow-xl"
+				className="w-full bg-linear-to-b from-gray-800 to-gray-900 border-gray-700 p-4 rounded-xl shadow-xl"
 			>
 				<form onSubmit={handleSubmit} className="space-y-4">
 					<div>
@@ -80,7 +80,7 @@ export function SubmitStreak({
 					<Button
 						type="submit"
 						disabled={isPending || isDealing}
-						className="w-full bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white transition-all duration-200"
+						className="w-full bg-linear-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white transition-all duration-200"
 					>
 						Publish {streak} Win{streak > 1 ? 's' : ''}
 					</Button>

@@ -59,7 +59,7 @@ export function PlayingCard({
 						initial={{ rotateY: 0 }}
 						exit={{ rotateY: 90 }}
 						transition={{ duration: 0.2 }}
-						className="bg-gradient-to-t from-blue-900 to-blue-700 rounded-lg w-16 h-24 sm:w-20 sm:h-28 flex items-center justify-center border-4 border-blue-500 shadow-lg"
+						className="bg-linear-to-t from-blue-900 to-blue-700 rounded-lg w-16 h-24 sm:w-20 sm:h-28 flex items-center justify-center border-4 border-blue-500 shadow-lg"
 					>
 						<div className="text-blue-200 text-4xl font-bold">?</div>
 					</motion.div>
@@ -69,7 +69,7 @@ export function PlayingCard({
 						initial={{ rotateY: -90 }}
 						animate={{ rotateY: 0 }}
 						transition={{ duration: 0.2 }}
-						className={`bg-gradient-to-t to-gray-900 from-gray-700 rounded-lg w-16 h-24 sm:w-20 sm:h-28 flex flex-col items-center justify-between p-2 border-4 ${getBorderColor()} shadow-lg relative`}
+						className={`bg-linear-to-t to-gray-900 from-gray-700 rounded-lg w-16 h-24 sm:w-20 sm:h-28 flex flex-col items-center justify-between p-2 border-4 ${getBorderColor()} shadow-lg relative`}
 					>
 						<div
 							className={`text-lg sm:text-2xl font-bold absolute top-1 left-2 ${

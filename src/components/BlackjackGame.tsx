@@ -37,9 +37,9 @@ export default function BlackjackGame({ streaks }: { streaks: Streak[] }) {
 	}, [isGameStarted, startGame])
 
 	return (
-		<div className="min-h-dvh bg-gradient-to-b from-gray-900 to-gray-800 text-white flex flex-col">
+		<div className="min-h-dvh bg-linear-to-b from-gray-900 to-gray-800 text-white flex flex-col">
 			<div className="flex-1 flex md:items-center justify-center md:p-8">
-				<Card className="w-full max-w-4xl bg-gradient-to-br from-gray-800 to-gray-900 rounded-none md:border-blue-500 md:rounded-lg overflow-hidden shadow-2xl">
+				<Card className="w-full max-w-4xl bg-linear-to-br from-gray-800 to-gray-900 rounded-none md:border-blue-500 md:rounded-lg overflow-hidden shadow-2xl">
 					<CardContent className="p-4 md:p-8">
 						<div className="md:flex md:flex-row md:gap-6">
 							<div className="md:hidden w-full">
