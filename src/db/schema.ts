@@ -1,8 +1,6 @@
-import { integer, varchar, timestamp, pgSchema } from "drizzle-orm/pg-core";
+import { integer, varchar, timestamp, pgTable } from "drizzle-orm/pg-core";
 
-export const schema = pgSchema("blackjack");
-
-export const streaksTable = schema.table("streaks", {
+export const streaksTable = pgTable("streaks", {
     id: integer().primaryKey().generatedAlwaysAsIdentity(),
     name: varchar({ length: 255 }).notNull(),
     count: integer().notNull(),
