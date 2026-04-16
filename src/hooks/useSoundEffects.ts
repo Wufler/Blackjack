@@ -1,4 +1,5 @@
 import { useRef, useEffect, useCallback } from 'react'
+import { getMuted } from '@/lib/mute'
 
 export function useSoundEffects() {
     const cardAudioRef = useRef<HTMLAudioElement | null>(null)
@@ -10,6 +11,7 @@ export function useSoundEffects() {
     }, [])
 
     const playCardSound = useCallback(() => {
+        if (getMuted()) return
         if (cardAudioRef.current) {
             cardAudioRef.current.currentTime = 0
             cardAudioRef.current.play()
@@ -17,6 +19,7 @@ export function useSoundEffects() {
     }, [])
 
     const playMixingSound = useCallback(() => {
+        if (getMuted()) return
         if (mixingAudioRef.current) {
             mixingAudioRef.current.currentTime = 0
             mixingAudioRef.current.play()

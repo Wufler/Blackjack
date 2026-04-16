@@ -17,6 +17,7 @@ export const metadata: Metadata = {
 	title: 'Blackjack',
 	description:
 		'Try to build up a streak and submit your score to the leaderboard!',
+	metadataBase: new URL('https://blackyjack.vercel.app'),
 	openGraph: {
 		title: 'Blackjack',
 		description:

@@ -2,7 +2,8 @@
 
 import Github from './ui/github'
 import { memo, useState } from 'react'
-import { Keyboard } from 'lucide-react'
+import { Keyboard, Volume2, VolumeX } from 'lucide-react'
+import { toggleMuted, useMuted } from '@/lib/mute'
 import {
 	Popover,
 	PopoverContent,
@@ -12,17 +13,31 @@ import Link from 'next/link'
 
 export default memo(function Footer() {
 	const [isOpen, setIsOpen] = useState(false)
+	const muted = useMuted()
 
 	return (
 		<footer className="w-full text-gray-300 py-4 px-6">
 			<div className="flex items-center md:justify-evenly justify-between md:py-2">
 				<div>
-					2025,{' '}
+					2026,{' '}
 					<Link href="https://wolfey.me" target="_blank">
 						wolfey.me
 					</Link>
 				</div>
 				<div className="flex items-center gap-4">
+					<button
+						type="button"
+						onClick={toggleMuted}
+						aria-label={muted ? 'Unmute sounds' : 'Mute sounds'}
+						aria-pressed={muted}
+						className="flex items-center cursor-pointer hover:text-white transition-colors"
+					>
+						{muted ? (
+							<VolumeX className="size-6" />
+						) : (
+							<Volume2 className="size-6" />
+						)}
+					</button>
 					<div className="md:flex items-center hidden">
 						<Popover open={isOpen} onOpenChange={setIsOpen}>
 							<PopoverTrigger asChild>
