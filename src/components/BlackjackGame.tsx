@@ -45,9 +45,9 @@ export default function BlackjackGame({
   return (
     <div className="min-h-dvh bg-linear-to-b from-gray-900 to-gray-800 text-white flex flex-col">
       <div className="flex min-h-0 flex-1 justify-center md:items-center md:p-8">
-        <Card className="w-full max-w-4xl overflow-hidden rounded-none bg-linear-to-br from-gray-800 to-gray-900 shadow-2xl md:h-[calc(100dvh-8rem)] md:min-h-[550px] md:max-h-[690px] md:rounded-lg md:border-blue-500">
+        <Card className="w-full max-w-4xl overflow-hidden rounded-none bg-linear-to-br from-gray-800 to-gray-900 shadow-2xl md:h-[calc(100dvh-8rem)] md:min-h-137.5 md:max-h-172.5 md:rounded-lg md:border-blue-500">
           <CardContent className="p-4 md:h-full md:p-8">
-            <div className="md:h-full">
+            <div className="md:h-full md:min-h-0">
               <div className="md:hidden w-full">
                 <Tabs defaultValue="game" className="gap-4">
                   <TabsList
@@ -56,13 +56,13 @@ export default function BlackjackGame({
                   >
                     <TabsTrigger
                       value="game"
-                      className="border-0 group-data-horizontal/tabs:after:-bottom-[0.5px]"
+                      className="border-0 group-data-horizontal/tabs:after:bottom-[-0.5px]"
                     >
                       Game
                     </TabsTrigger>
                     <TabsTrigger
                       value="streaks"
-                      className="border-0 group-data-horizontal/tabs:after:-bottom-[0.5px]"
+                      className="border-0 group-data-horizontal/tabs:after:bottom-[-0.5px]"
                     >
                       Streaks
                     </TabsTrigger>
@@ -128,8 +128,8 @@ export default function BlackjackGame({
                 </Tabs>
               </div>
 
-              <div className="hidden w-full md:grid md:h-full md:grid-cols-[minmax(0,1fr)_20rem] md:items-stretch md:gap-6">
-                <div className="min-w-0">
+              <div className="hidden w-full md:grid md:h-full md:min-h-0 md:grid-cols-[minmax(0,1fr)_20rem] md:grid-rows-[minmax(0,1fr)] md:items-stretch md:gap-6">
+                <div className="min-w-0 min-h-0 md:h-full">
                   <AnimatePresence mode="wait">
                     {!isGameStarted ? (
                       <motion.div

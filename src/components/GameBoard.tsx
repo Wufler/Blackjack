@@ -90,7 +90,7 @@ function HandDisplay({
           </div>
         )}
       </div>
-      <div className="relative h-[150px] sm:h-[200px]">
+      <div className="relative h-37.5 sm:h-50">
         <AnimatePresence>
           {hand.map((card, index) => (
             <PlayingCard
