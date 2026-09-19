@@ -1,95 +1,93 @@
-'use client'
+"use client";
 
-import Github from './ui/github'
-import { memo, useState } from 'react'
-import { Keyboard, Volume2, VolumeX } from 'lucide-react'
-import { toggleMuted, useMuted } from '@/lib/mute'
+import { IconKeyboard, IconVolume, IconVolumeOff } from "@tabler/icons-react";
+import Link from "next/link";
+import { memo, useState } from "react";
 import {
-	Popover,
-	PopoverContent,
-	PopoverTrigger,
-} from '@/components/ui/popover'
-import Link from 'next/link'
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { toggleMuted, useMuted } from "@/lib/mute";
+import Github from "./ui/github";
 
 export default memo(function Footer() {
-	const [isOpen, setIsOpen] = useState(false)
-	const muted = useMuted()
+  const [isOpen, setIsOpen] = useState(false);
+  const muted = useMuted();
 
-	return (
-		<footer className="w-full text-gray-300 py-4 px-6">
-			<div className="flex items-center md:justify-evenly justify-between md:py-2">
-				<div>
-					2026,{' '}
-					<Link href="https://wolfey.me" target="_blank">
-						wolfey.me
-					</Link>
-				</div>
-				<div className="flex items-center gap-4">
-					<button
-						type="button"
-						onClick={toggleMuted}
-						aria-label={muted ? 'Unmute sounds' : 'Mute sounds'}
-						aria-pressed={muted}
-						className="flex items-center cursor-pointer hover:text-white transition-colors"
-					>
-						{muted ? (
-							<VolumeX className="size-6" />
-						) : (
-							<Volume2 className="size-6" />
-						)}
-					</button>
-					<div className="md:flex items-center hidden">
-						<Popover open={isOpen} onOpenChange={setIsOpen}>
-							<PopoverTrigger asChild>
-								<div
-									className="flex items-center cursor-pointer popover-trigger"
-									onMouseEnter={() => setIsOpen(true)}
-									onMouseLeave={() => setIsOpen(false)}
-								>
-									<Keyboard className="size-6" />
-								</div>
-							</PopoverTrigger>
-							<PopoverContent
-								className="max-w-56 bg-linear-to-b to-gray-800 from-gray-900 border-gray-700 p-4 rounded-lg shadow-lg"
-								sideOffset={12}
-								onMouseEnter={() => setIsOpen(true)}
-								onMouseLeave={() => setIsOpen(false)}
-							>
-								<div className="grid gap-4">
-									<div className="grid gap-2">
-										<div className="flex items-center justify-between">
-											<span className="text-sm">Hit</span>
-											<kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium">
-												<span className="text-xs">Q</span>
-											</kbd>
-										</div>
-										<div className="flex items-center justify-between">
-											<span className="text-sm">Stand</span>
-											<kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium">
-												<span className="text-xs">W / Space</span>
-											</kbd>
-										</div>
-										<div className="flex items-center justify-between">
-											<span className="text-sm">Play Again</span>
-											<kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium">
-												<span className="text-xs">E / Space</span>
-											</kbd>
-										</div>
-									</div>
-								</div>
-							</PopoverContent>
-						</Popover>
-					</div>
-					<a
-						href="https://github.com/WoIfey/Blackjack"
-						target="_blank"
-						rel="noopener noreferrer"
-						className="flex items-center"
-					>
-						<Github className="size-6" />
-					</a>
-				</div>
-			</div>
-		</footer>
-	)
-})
+  return (
+    <footer className="w-full text-gray-300 py-4 px-6">
+      <div className="flex items-center md:justify-evenly justify-between md:py-2">
+        <div>
+          2026,{" "}
+          <Link href="https://wolfey.me" target="_blank">
+            wolfey.me
+          </Link>
+        </div>
+        <div className="flex items-center gap-4">
+          <button
+            type="button"
+            onClick={toggleMuted}
+            aria-label={muted ? "Unmute sounds" : "Mute sounds"}
+            aria-pressed={muted}
+            className="flex items-center cursor-pointer hover:text-white transition-colors"
+          >
+            {muted ? (
+              <IconVolumeOff className="size-6" />
+            ) : (
+              <IconVolume className="size-6" />
+            )}
+          </button>
+          <div className="md:flex items-center hidden">
+            <Popover open={isOpen} onOpenChange={setIsOpen}>
+              <PopoverTrigger
+                className="flex items-center cursor-pointer popover-trigger"
+                onMouseEnter={() => setIsOpen(true)}
+                onMouseLeave={() => setIsOpen(false)}
+              >
+                <IconKeyboard className="size-6" />
+              </PopoverTrigger>
+              <PopoverContent
+                className="max-w-56 bg-linear-to-b to-gray-800 from-gray-900 border-gray-700 p-4 rounded-lg shadow-lg"
+                sideOffset={12}
+                onMouseEnter={() => setIsOpen(true)}
+                onMouseLeave={() => setIsOpen(false)}
+              >
+                <div className="grid gap-4">
+                  <div className="grid gap-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm">Hit</span>
+                      <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium">
+                        <span className="text-xs">Q</span>
+                      </kbd>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm">Stand</span>
+                      <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium">
+                        <span className="text-xs">W / Space</span>
+                      </kbd>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm">Play Again</span>
+                      <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium">
+                        <span className="text-xs">E / Space</span>
+                      </kbd>
+                    </div>
+                  </div>
+                </div>
+              </PopoverContent>
+            </Popover>
+          </div>
+          <a
+            href="https://github.com/WoIfey/Blackjack"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center"
+          >
+            <Github className="size-6" />
+          </a>
+        </div>
+      </div>
+    </footer>
+  );
+});
